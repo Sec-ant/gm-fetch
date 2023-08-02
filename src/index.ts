@@ -54,6 +54,9 @@ const gmFetch: typeof fetch = async function (input, init) {
         overrideMimeType: request.headers.get("Content-Type") ?? undefined,
         anonymous: request.credentials === "omit",
         onload: ({ response: responseBody }) => {
+          if (settled) {
+            return;
+          }
           resolveBlob(responseBody);
         },
         async onreadystatechange({
