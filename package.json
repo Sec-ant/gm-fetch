@@ -1,0 +1,53 @@
+{
+  "name": "@sec-ant/gm-fetch",
+  "version": "0.0.1",
+  "description": "A fetch API of GM_xmlhttpRequest",
+  "keywords": [
+    "fetch",
+    "gm-fetch",
+    "GM_xmlhttpRequest",
+    "Tampermonkey",
+    "Violentmonkey",
+    "Greasemonkey",
+    "userscript"
+  ],
+  "homepage": "https://github.com/Sec-ant/gm-fetch",
+  "repository": "https://github.com/Sec-ant/gm-fetch.git",
+  "bugs": "https://github.com/Sec-ant/gm-fetch/issues",
+  "license": "MIT",
+  "private": false,
+  "author": {
+    "name": "Ze-Zheng Wu",
+    "email": "zzwu@zju.edu.cn",
+    "url": "https://github.com/Sec-ant"
+  },
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "browser": "./dist/index.umd.js",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.umd.js",
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "vite -m monkey",
+    "clean": "rm -fr ./dist",
+    "build:package": "vite build -m package",
+    "build:monkey": "vite build -m monkey",
+    "lint": "tsc --noEmit --emitDeclarationOnly false",
+    "preprebuild": "npm run lint",
+    "prebuild": "npm run clean",
+    "build": "npm run build:package && npm run build:monkey",
+    "postbuild": "tsc",
+    "preview": "vite preview -m monkey"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6",
+    "vite": "^4.4.8",
+    "vite-plugin-monkey": "^3.3.1"
+  }
+}
