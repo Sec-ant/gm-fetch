@@ -6,7 +6,7 @@ const UMD_LIB_NAME = "gmFetch";
 
 export default defineConfig(({ mode }) => {
   switch (mode) {
-    case "package": {
+    case "es": {
       return {
         build: {
           emptyOutDir: false,
@@ -14,10 +14,27 @@ export default defineConfig(({ mode }) => {
             entry: {
               index: "./src/index.ts",
             },
-            formats: ["es", "umd"],
+            formats: ["es"],
+          },
+        },
+      };
+    }
+    case "umd": {
+      return {
+        build: {
+          emptyOutDir: false,
+          lib: {
+            entry: {
+              index: "./src/index.ts",
+            },
+            formats: ["umd"],
             name: UMD_LIB_NAME,
-            fileName: (format, entryName) =>
-              `${entryName}${format === "es" ? "" : `.${format}`}.js`,
+            fileName: (format, entryName) => `${entryName}.${format}.js`,
+          },
+        },
+        resolve: {
+          alias: {
+            "vite-plugin-monkey/dist/client": "vite-plugin-monkey/dist/native",
           },
         },
       };
@@ -33,8 +50,12 @@ export default defineConfig(({ mode }) => {
             // NOTE:
             // we have to use function to return the file name,
             // or the export won't be exposed in globalThis.
-            // this seems to be a vite-plugin-monkey bug.
             fileName: () => `${name.split("/").pop()}.user.js`,
+          },
+        },
+        resolve: {
+          alias: {
+            "vite-plugin-monkey/dist/client": "vite-plugin-monkey/dist/native",
           },
         },
         plugins: [

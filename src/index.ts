@@ -1,6 +1,4 @@
-import type { GM_xmlhttpRequest as GmXhrFc } from "$";
-
-declare const GM_xmlhttpRequest: typeof GmXhrFc;
+import { GM_xmlhttpRequest } from "vite-plugin-monkey/dist/client";
 
 function parseHeaders(rawHeaders: string) {
   const headers = new Headers();
@@ -43,7 +41,7 @@ const gmFetch: typeof fetch = async function (input, init) {
     const responseBlobPromise = new Promise<Blob | null>((resolveBlob) => {
       const { abort } = GM_xmlhttpRequest({
         method: request.method.toUpperCase(),
-        url: (request.url ?? "") || location.href,
+        url: request.url || location.href,
         headers,
         data: data.size ? data : undefined,
         redirect: request.redirect,

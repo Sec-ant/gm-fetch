@@ -36,12 +36,12 @@
   "scripts": {
     "dev": "vite -m monkey",
     "clean": "rm -fr ./dist",
-    "build:package": "vite build -m package",
+    "build:es": "vite build -m es",
+    "build:umd": "vite build -m umd",
     "build:monkey": "vite build -m monkey",
     "lint": "tsc --noEmit --emitDeclarationOnly false",
-    "preprebuild": "npm run lint",
-    "prebuild": "npm run clean",
-    "build": "npm run build:package && npm run build:monkey",
+    "prebuild": "npm run lint && npm run clean",
+    "build": "npm run build:es && npm run build:umd && npm run build:monkey",
     "postbuild": "tsc",
     "preview": "vite preview -m monkey"
   },

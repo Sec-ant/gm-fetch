@@ -16,10 +16,10 @@ If you use [vite-plugin-monkey](https://github.com/lisonge/vite-plugin-monkey):
 npm i @sec-ant/gm-fetch
 ```
 
-or just plain userscript (change the version number as needed):
+or just plain userscript (change `latest` to the version number as needed):
 
 ```js
-// @require   https://cdn.jsdelivr.net/npm/@sec-ant/gm-fetch@0.0.1/dist/index.umd.js
+// @require   https://cdn.jsdelivr.net/npm/@sec-ant/gm-fetch@latest/dist/index.umd.js
 ```
 
 ## Usage
