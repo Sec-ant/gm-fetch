@@ -46,6 +46,7 @@ export default defineConfig(({ mode }) => {
             userscript: {
               name: "GM Fetch",
               namespace: "https://github.com/Sec-ant/gm-fetch",
+              match: "*://*/*",
               grant: "GM_xmlhttpRequest",
             },
           }),
