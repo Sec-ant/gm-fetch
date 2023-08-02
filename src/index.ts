@@ -40,77 +40,88 @@ const gmFetch: typeof fetch = async function (input, init) {
   });
   return new Promise<Response>((resolve, reject) => {
     let settled = false;
-    const responseBlobPromise = new Promise<Blob>((resolveBlob) => {
-      const { abort } = GM_xmlhttpRequest({
-        method: request.method.toUpperCase(),
-        url: (request.url ?? "") || location.href,
-        headers,
-        data: data.size ? data : undefined,
-        binary: true,
-        nocache: request.cache === "no-store",
-        revalidate: request.cache === "reload",
-        timeout: 300_000,
-        responseType: GM_xmlhttpRequest.RESPONSE_TYPE_STREAM ?? "blob",
-        overrideMimeType: request.headers.get("Content-Type") ?? undefined,
-        anonymous: request.credentials === "omit",
-        onload: ({ response: responseBody }) => {
-          resolveBlob(responseBody);
-        },
-        async onreadystatechange({
-          readyState,
-          responseHeaders,
-          status,
-          statusText,
-          finalUrl,
-          response: responseBody,
-        }) {
-          if (readyState === XMLHttpRequest.DONE) {
-            request.signal.removeEventListener("abort", abort);
-          } else if (readyState !== XMLHttpRequest.HEADERS_RECEIVED) {
-            return;
-          }
-          if (settled) {
-            return;
-          }
-          // DONE or HEADERS_RECEIVED
-          const response = new Response(
-            responseBody instanceof ReadableStream
-              ? responseBody
-              : await responseBlobPromise,
-            {
-              headers: parseHeaders(responseHeaders),
-              status,
-              statusText,
+    const responseBlobPromise = new Promise<Blob | null>(
+      (resolveBlob, rejectBlob) => {
+        const { abort } = GM_xmlhttpRequest({
+          method: request.method.toUpperCase(),
+          url: (request.url ?? "") || location.href,
+          headers,
+          data: data.size ? data : undefined,
+          redirect: request.redirect,
+          binary: true,
+          nocache: request.cache === "no-store",
+          revalidate: request.cache === "reload",
+          timeout: 300_000,
+          responseType: GM_xmlhttpRequest.RESPONSE_TYPE_STREAM ?? "blob",
+          overrideMimeType: request.headers.get("Content-Type") ?? undefined,
+          anonymous: request.credentials === "omit",
+          onload: ({ response: responseBody }) => {
+            if (settled) {
+              rejectBlob();
+              return;
             }
-          );
-          Object.defineProperties(response, {
-            url: {
-              value: finalUrl,
-            },
-            redirected: {
-              value: request.url !== finalUrl,
-            },
-            type: {
-              value: "basic",
-            },
-          });
-          resolve(response);
-          settled = true;
-        },
-        onerror: ({ statusText, error }) => {
-          reject(
-            new TypeError(statusText || error || "Network request failed.")
-          );
-        },
-        ontimeout() {
-          reject(new TypeError("Network request timeout."));
-        },
-        onabort() {
-          reject(new DOMException("Aborted", "AbortError"));
-        },
-      });
-      request.signal.addEventListener("abort", abort);
-    });
+            resolveBlob(responseBody as Blob);
+          },
+          async onreadystatechange({
+            readyState,
+            responseHeaders,
+            status,
+            statusText,
+            finalUrl,
+            response: responseBody,
+          }) {
+            if (readyState === XMLHttpRequest.DONE) {
+              request.signal.removeEventListener("abort", abort);
+            } else if (readyState !== XMLHttpRequest.HEADERS_RECEIVED) {
+              return;
+            }
+            if (settled) {
+              rejectBlob();
+              return;
+            }
+            // DONE or HEADERS_RECEIVED
+            const response = new Response(
+              responseBody instanceof ReadableStream
+                ? responseBody
+                : await responseBlobPromise,
+              {
+                headers: parseHeaders(responseHeaders),
+                status,
+                statusText,
+              }
+            );
+            Object.defineProperties(response, {
+              url: {
+                value: finalUrl,
+              },
+              redirected: {
+                value: request.url !== finalUrl,
+              },
+              type: {
+                value: "basic",
+              },
+            });
+            resolve(response);
+            settled = true;
+          },
+          onerror: ({ statusText, error }) => {
+            reject(
+              new TypeError(statusText || error || "Network request failed.")
+            );
+            rejectBlob();
+          },
+          ontimeout() {
+            reject(new TypeError("Network request timeout."));
+            rejectBlob();
+          },
+          onabort() {
+            reject(new DOMException("Aborted", "AbortError"));
+            rejectBlob();
+          },
+        });
+        request.signal.addEventListener("abort", abort);
+      }
+    );
   });
 };
 
