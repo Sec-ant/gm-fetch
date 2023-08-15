@@ -85,7 +85,6 @@ const gmFetch: typeof fetch = async function (input, init) {
               ? responseBody
               : await responseBlobPromise,
             {
-              headers: parseHeaders(responseHeaders),
               status,
               statusText,
             }
@@ -99,6 +98,9 @@ const gmFetch: typeof fetch = async function (input, init) {
             },
             type: {
               value: "basic",
+            },
+            headers: {
+              value: parseHeaders(responseHeaders),
             },
           });
           resolve(response);
