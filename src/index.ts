@@ -21,11 +21,14 @@ function parseHeaders(rawHeaders: string) {
 }
 
 const gmFetch: typeof fetch = async function (input, init) {
+  if (typeof GM_xmlhttpRequest !== "function") {
+    throw new DOMException("GM_xmlhttpRequest not granted.", "NotFoundError");
+  }
   // construct a new request to apply default values
   const request = new Request(input, init);
   // reject aborted request
   if (request.signal.aborted) {
-    throw new DOMException("Request is aborted", "AbortError");
+    throw new DOMException("Network request aborted.", "AbortError");
   }
   // convert request data to blob
   // TODO: https://github.com/Tampermonkey/tampermonkey/issues/1757
@@ -112,7 +115,7 @@ const gmFetch: typeof fetch = async function (input, init) {
           resolveBlob(null);
         },
         onabort() {
-          reject(new DOMException("Aborted", "AbortError"));
+          reject(new DOMException("Network request aborted.", "AbortError"));
           resolveBlob(null);
         },
       });
