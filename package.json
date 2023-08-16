@@ -1,6 +1,6 @@
 {
   "name": "@sec-ant/gm-fetch",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A fetch API of GM_xmlhttpRequest",
   "keywords": [
     "fetch",
