@@ -32,7 +32,10 @@ const gmFetch: typeof fetch = async function (input, init) {
   }
   // convert request data to blob
   // TODO: https://github.com/Tampermonkey/tampermonkey/issues/1757
-  const data = await request.blob();
+  const dataBuffer = await request.arrayBuffer();
+  const data = dataBuffer.byteLength
+    ? new TextDecoder().decode(dataBuffer)
+    : undefined;
   // apply non-safe headers
   const headers = Object.fromEntries(request.headers);
   // use "new Headers()" to filter out invalidate header keys or values
@@ -46,7 +49,7 @@ const gmFetch: typeof fetch = async function (input, init) {
         method: request.method.toUpperCase(),
         url: request.url || location.href,
         headers,
-        data: data.size ? data : undefined,
+        data,
         redirect: request.redirect,
         binary: true,
         nocache: request.cache === "no-store",
