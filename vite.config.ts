@@ -1,12 +1,13 @@
-import { defineConfig } from "vite";
+import { defineConfig, Plugin } from "vite";
 import monkey from "vite-plugin-monkey";
 import { name } from "./package.json";
+import replace from "@rollup/plugin-replace";
 
-const UMD_LIB_NAME = "gmFetch";
+const LIB_NAME = "gmFetch";
 
 export default defineConfig(({ mode }) => {
   switch (mode) {
-    case "es": {
+    case "es":
       return {
         build: {
           emptyOutDir: false,
@@ -18,8 +19,7 @@ export default defineConfig(({ mode }) => {
           },
         },
       };
-    }
-    case "umd": {
+    case "iife":
       return {
         build: {
           emptyOutDir: false,
@@ -27,8 +27,8 @@ export default defineConfig(({ mode }) => {
             entry: {
               index: "./src/index.ts",
             },
-            formats: ["umd"],
-            name: UMD_LIB_NAME,
+            formats: ["iife"],
+            name: LIB_NAME,
             fileName: (format, entryName) => `${entryName}.${format}.js`,
           },
         },
@@ -38,7 +38,6 @@ export default defineConfig(({ mode }) => {
           },
         },
       };
-    }
     case "monkey":
       return {
         build: {
@@ -46,7 +45,7 @@ export default defineConfig(({ mode }) => {
           lib: {
             entry: "./src/index.ts",
             formats: ["umd"],
-            name: UMD_LIB_NAME,
+            name: LIB_NAME,
             // NOTE:
             // we have to use function to return the file name,
             // or the export won't be exposed in globalThis.
@@ -59,6 +58,13 @@ export default defineConfig(({ mode }) => {
           },
         },
         plugins: [
+          replace({
+            preventAssignment: true,
+            values: {
+              exports: JSON.stringify(undefined),
+              define: JSON.stringify(undefined),
+            },
+          }) as Plugin,
           monkey({
             entry: "./src/index.ts",
             build: {
@@ -74,6 +80,6 @@ export default defineConfig(({ mode }) => {
         ],
       };
     default:
-      throw new Error("Unknown mode.");
+      throw new Error(`Unknown mode: ${mode}`);
   }
 });

@@ -1,12 +1,12 @@
 # @sec-ant/gm-fetch
 
-A fetch API of `GM_xmlhttpRequest`.
+A fetch API for `GM_xmlhttpRequest` / `GM.xmlHttpRequest`.
 
 ## Features
 
 - Use `responseType: stream` to prevent buffering large data when possible.
 - Use Typescript.
-- Provides es module, umd module and lib mode userscript as well.
+- Provides es module, iife script and lib mode userscript as well.
 
 ## Install
 
@@ -19,7 +19,7 @@ npm i @sec-ant/gm-fetch
 or just plain userscript (change `latest` to the version number as needed):
 
 ```js
-// @require   https://cdn.jsdelivr.net/npm/@sec-ant/gm-fetch@latest/dist/index.umd.js
+// @require   https://cdn.jsdelivr.net/npm/@sec-ant/gm-fetch@latest/dist/index.iife.js
 ```
 
 ## Usage
@@ -33,9 +33,10 @@ or just plain userscript (change `latest` to the version number as needed):
       plugins: [
         monkey({
           userscript: {
+            // or GM.xmlHttpRequest
             grant: "GM_xmlhttpRequest",
             // whatever websites you're to make requests to
-            connect: ["localhost"],
+            connect: ["github.com"],
           },
         }),
       ];
@@ -46,7 +47,7 @@ or just plain userscript (change `latest` to the version number as needed):
 
     ```js
     // @grant     GM_xmlhttpRequest
-    // @connect   localhost
+    // @connect   github.com
     ```
 
 2.  Use it just like fetch:
@@ -56,7 +57,7 @@ or just plain userscript (change `latest` to the version number as needed):
     ```ts
     import gmFetch from "@sec-ant/gm-fetch";
 
-    gmFetch("http://localhost:4567/100.zip");
+    gmFetch("https://github.com/Sec-ant/gm-fetch");
     ```
 
     plain userscript:
@@ -65,7 +66,7 @@ or just plain userscript (change `latest` to the version number as needed):
     /* globals gmFetch */
     (function () {
       "use strict";
-      gmFetch("http://localhost:4567/100.zip");
+      gmFetch("https://github.com/Sec-ant/gm-fetch");
     })();
     ```
 

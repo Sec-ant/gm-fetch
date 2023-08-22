@@ -1,0 +1,16 @@
+{
+  "extends": ["./tsconfig.json"],
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "Bundler",
+    "types": ["node"],
+    "resolveJsonModule": true,
+    "allowJs": true
+  },
+  "include": [
+    "./scripts",
+    "./vite.config.ts",
+    "./package.json",
+    "./package-lock.json"
+  ]
+}
