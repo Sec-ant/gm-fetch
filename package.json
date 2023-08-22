@@ -1,7 +1,28 @@
 {
   "name": "@sec-ant/gm-fetch",
-  "version": "0.0.9",
-  "description": "A fetch API of GM_xmlhttpRequest",
+  "description": "A fetch API for GM_xmlhttpRequest / GM.xmlHttpRequest",
+  "private": false,
+  "version": "1.0.0",
+  "type": "module",
+  "files": [
+    "./dist"
+  ],
+  "browser": "./dist/index.iife.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sec-ant/gm-fetch"
+  },
+  "homepage": "https://github.com/Sec-ant/gm-fetch",
+  "bugs": {
+    "url": "https://github.com/Sec-ant/gm-fetch/issues",
+    "email": "zzwu@zju.edu.cn"
+  },
   "keywords": [
     "fetch",
     "gm-fetch",
@@ -11,43 +32,35 @@
     "Greasemonkey",
     "userscript"
   ],
-  "homepage": "https://github.com/Sec-ant/gm-fetch",
-  "repository": "https://github.com/Sec-ant/gm-fetch.git",
-  "bugs": "https://github.com/Sec-ant/gm-fetch/issues",
-  "license": "MIT",
-  "private": false,
   "author": {
-    "name": "Ze-Zheng Wu",
-    "email": "zzwu@zju.edu.cn",
-    "url": "https://github.com/Sec-ant"
+    "name": "Ze-Zheng Wu"
   },
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.js",
-  "browser": "./dist/index.umd.js",
-  "exports": {
-    "import": "./dist/index.js",
-    "require": "./dist/index.umd.js",
-    "types": "./dist/index.d.ts",
-    "default": "./dist/index.js"
-  },
+  "license": "MIT",
+  "config": {},
   "scripts": {
     "dev": "vite -m monkey",
-    "clean": "rm -fr ./dist",
+    "clean": "rimraf ./dist",
+    "type-check": "tsc --noEmit --emitDeclarationOnly false",
     "build:es": "vite build -m es",
-    "build:umd": "vite build -m umd",
+    "build:iife": "vite build -m iife",
     "build:monkey": "vite build -m monkey",
-    "lint": "tsc --noEmit --emitDeclarationOnly false",
-    "prebuild": "npm run lint && npm run clean",
-    "build": "npm run build:es && npm run build:umd && npm run build:monkey",
+    "prebuild": "npm run type-check && npm run clean",
+    "build": "npm run build:es && npm run build:iife && npm run build:monkey",
     "postbuild": "tsc",
-    "preview": "vite preview -m monkey"
+    "preview": "vite preview -m monkey",
+    "prepublishOnly": "npm run build",
+    "ncu": "npx npm-check-updates -u",
+    "postncu": "npm i"
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^5.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.47.0",
+    "npm-check-updates": "^16.13.0",
+    "rimraf": "^5.0.1",
     "typescript": "^5.1.6",
-    "vite": "^4.4.8",
-    "vite-plugin-monkey": "^3.4.0"
+    "vite": "^4.4.9",
+    "vite-plugin-monkey": "^3.4.2"
   }
 }

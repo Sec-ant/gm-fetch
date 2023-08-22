@@ -1,4 +1,4 @@
-import { GM_xmlhttpRequest } from "vite-plugin-monkey/dist/client";
+import { GM_xmlhttpRequest, GM } from "vite-plugin-monkey/dist/client";
 
 function parseHeaders(rawHeaders: string) {
   const headers = new Headers();
@@ -6,10 +6,10 @@ function parseHeaders(rawHeaders: string) {
   // https://tools.ietf.org/html/rfc7230#section-3.2
   const preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, " ");
   preProcessedHeaders.split(/\r?\n/).forEach(function (line) {
-    var parts = line.split(":");
-    var key = parts.shift()?.trim();
+    const parts = line.split(":");
+    const key = parts.shift()?.trim();
     if (key) {
-      var value = parts.join(":").trim();
+      const value = parts.join(":").trim();
       try {
         headers.append(key, value);
       } catch (error) {
@@ -21,8 +21,12 @@ function parseHeaders(rawHeaders: string) {
 }
 
 const gmFetch: typeof fetch = async function (input, init) {
-  if (typeof GM_xmlhttpRequest !== "function") {
-    throw new DOMException("GM_xmlhttpRequest not granted.", "NotFoundError");
+  const gmXhr = GM_xmlhttpRequest || GM.xmlHttpRequest;
+  if (typeof gmXhr !== "function") {
+    throw new DOMException(
+      "GM_xmlhttpRequest or GM.xmlHttpRequest is not granted.",
+      "NotFoundError"
+    );
   }
   // construct a new request to apply default values
   const request = new Request(input, init);
@@ -45,7 +49,7 @@ const gmFetch: typeof fetch = async function (input, init) {
   return new Promise<Response>((resolve, reject) => {
     let settled = false;
     const responseBlobPromise = new Promise<Blob | null>((resolveBlob) => {
-      const { abort } = GM_xmlhttpRequest({
+      const { abort } = gmXhr({
         method: request.method.toUpperCase(),
         url: request.url || location.href,
         headers,
@@ -55,7 +59,7 @@ const gmFetch: typeof fetch = async function (input, init) {
         nocache: request.cache === "no-store",
         revalidate: request.cache === "reload",
         timeout: 300_000,
-        responseType: GM_xmlhttpRequest.RESPONSE_TYPE_STREAM ?? "blob",
+        responseType: gmXhr.RESPONSE_TYPE_STREAM ?? "blob",
         overrideMimeType: request.headers.get("Content-Type") ?? undefined,
         anonymous: request.credentials === "omit",
         onload: ({ response: responseBody }) => {
