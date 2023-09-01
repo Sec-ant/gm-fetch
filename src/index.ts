@@ -87,28 +87,42 @@ const gmFetch: typeof fetch = async function (input, init) {
             return;
           }
           // DONE or HEADERS_RECEIVED
+          const parsedHeaders = parseHeaders(responseHeaders);
+          const redirected = request.url !== finalUrl;
           const response = new Response(
             responseBody instanceof ReadableStream
               ? responseBody
               : await responseBlobPromise,
             {
+              headers: parsedHeaders,
               status,
               statusText,
             }
           );
+          // non-intrusive override
           Object.defineProperties(response, {
             url: {
               value: finalUrl,
             },
-            redirected: {
-              value: request.url !== finalUrl,
-            },
             type: {
               value: "basic",
             },
-            headers: {
-              value: new Headers(parseHeaders(responseHeaders)),
-            },
+            ...(response.redirected !== redirected
+              ? {
+                  redirected: {
+                    value: redirected,
+                  },
+                }
+              : {}),
+            // https://fetch.spec.whatwg.org/#forbidden-response-header-name
+            ...(parsedHeaders.has("set-cookie") ||
+            parsedHeaders.has("set-cookie2")
+              ? {
+                  headers: {
+                    value: parsedHeaders,
+                  },
+                }
+              : {}),
           });
           resolve(response);
           settled = true;
