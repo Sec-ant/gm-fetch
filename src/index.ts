@@ -107,7 +107,7 @@ const gmFetch: typeof fetch = async function (input, init) {
               value: "basic",
             },
             headers: {
-              value: parseHeaders(responseHeaders),
+              value: new Headers(parseHeaders(responseHeaders)),
             },
           });
           resolve(response);
