@@ -51,7 +51,6 @@
     "build": "npm run build:es && npm run build:iife && npm run build:monkey",
     "postbuild": "tsc",
     "preview": "vite preview -m monkey",
-    "prepublishOnly": "npm run build",
     "ncu": "npx npm-check-updates -u",
     "postncu": "npm i"
   },
