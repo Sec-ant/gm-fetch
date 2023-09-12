@@ -14,5 +14,3 @@ updates:
         update-types:
           - "minor"
           - "patch"
-    commit-message:
-      prefix: "chore"
