@@ -9,3 +9,10 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    groups:
+      minor-and-patch-updates:
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "chore"
