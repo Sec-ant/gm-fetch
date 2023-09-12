@@ -8,6 +8,7 @@
         "releaseRules": [
           { "type": "refactor", "release": "patch" },
           { "type": "docs", "release": "patch" },
+          { "type": "chore", "scope": "deps-dev", "release": false },
           { "type": "chore", "release": "patch" },
           { "scope": "no-release", "release": false }
         ]
