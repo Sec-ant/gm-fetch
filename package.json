@@ -53,6 +53,8 @@
     "postbuild": "tsc",
     "preview": "vite preview -m monkey",
     "prepublishOnly": "npm run build",
+    "sync": "curl -X PUT 'https://registry-direct.npmmirror.com/@sec-ant/gm-fetch/sync'",
+    "postpublish": "npm run sync",
     "ncu": "npx npm-check-updates -u",
     "postncu": "npm i"
   },

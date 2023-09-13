@@ -1,9 +1,10 @@
 import { defineConfig, Plugin } from "vite";
-import monkey from "vite-plugin-monkey";
-import { name } from "./package.json";
+import monkey, { cdn } from "vite-plugin-monkey";
 import replace from "@rollup/plugin-replace";
+import { name } from "./package.json";
 
 const LIB_NAME = "gmFetch";
+const SCRIPT_NAME = name.split("/").pop();
 
 export default defineConfig(({ mode }) => {
   switch (mode) {
@@ -49,7 +50,7 @@ export default defineConfig(({ mode }) => {
             // NOTE:
             // we have to use function to return the file name,
             // or the export won't be exposed in globalThis.
-            fileName: () => `${name.split("/").pop()}.user.js`,
+            fileName: () => `${SCRIPT_NAME}.user.js`,
           },
         },
         resolve: {
@@ -68,11 +69,20 @@ export default defineConfig(({ mode }) => {
           monkey({
             entry: "./src/index.ts",
             build: {
-              fileName: `${name.split("/").pop()}.user.js`,
+              fileName: `${SCRIPT_NAME}.user.js`,
+              metaFileName: true,
             },
             userscript: {
               name: "GM Fetch",
-              namespace: "https://github.com/Sec-ant/gm-fetch",
+              namespace: "https://github.com/Sec-ant",
+              downloadURL: cdn.npmmirror(
+                undefined,
+                `dist/${SCRIPT_NAME}.user.js`
+              )[1]("latest", name),
+              updateURL: cdn.npmmirror(
+                undefined,
+                `dist/${SCRIPT_NAME}.meta.js`
+              )[1]("latest", name),
               match: "*://*/*",
               grant: "GM_xmlhttpRequest",
             },
