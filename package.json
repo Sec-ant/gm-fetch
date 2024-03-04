@@ -59,16 +59,16 @@
     "postncu": "npm i"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.1.0",
-    "@commitlint/config-conventional": "^18.1.0",
+    "@commitlint/cli": "^19.0.3",
+    "@commitlint/config-conventional": "^19.0.3",
     "@rollup/plugin-replace": "^5.0.2",
     "@semantic-release/git": "^10.0.1",
-    "@typescript-eslint/eslint-plugin": "^6.5.0",
-    "@typescript-eslint/parser": "^6.5.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
     "eslint": "^8.48.0",
     "npm-check-updates": "^16.13.2",
     "rimraf": "^5.0.1",
-    "semantic-release": "^22.0.0",
+    "semantic-release": "^23.0.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.2",
     "vite-plugin-monkey": "^3.5.0"
