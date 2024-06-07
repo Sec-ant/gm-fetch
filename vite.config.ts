@@ -1,6 +1,6 @@
-import { defineConfig, Plugin } from "vite";
-import monkey, { cdn } from "vite-plugin-monkey";
 import replace from "@rollup/plugin-replace";
+import { type Plugin, defineConfig } from "vite";
+import monkey, { cdn } from "vite-plugin-monkey";
 import { name } from "./package.json";
 
 const LIB_NAME = "gmFetch";
@@ -75,13 +75,13 @@ export default defineConfig(({ mode }) => {
             userscript: {
               name: "GM Fetch",
               namespace: "https://github.com/Sec-ant",
-              downloadURL: cdn.npmmirror(
+              downloadURL: cdn.jsdelivrFastly(
                 undefined,
-                `dist/${SCRIPT_NAME}.user.js`
+                `dist/${SCRIPT_NAME}.user.js`,
               )[1]("latest", name),
-              updateURL: cdn.npmmirror(
+              updateURL: cdn.jsdelivrFastly(
                 undefined,
-                `dist/${SCRIPT_NAME}.meta.js`
+                `dist/${SCRIPT_NAME}.meta.js`,
               )[1]("latest", name),
               match: "*://*/*",
               grant: "GM_xmlhttpRequest",
