@@ -1,11 +1,11 @@
-import { GM_xmlhttpRequest, GM } from "vite-plugin-monkey/dist/client";
+import { GM, GM_xmlhttpRequest } from "vite-plugin-monkey/dist/client";
 
 function parseHeaders(rawHeaders: string) {
   const headers = new Headers();
   // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
   // https://tools.ietf.org/html/rfc7230#section-3.2
   const preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, " ");
-  preProcessedHeaders.split(/\r?\n/).forEach(function (line) {
+  for (const line of preProcessedHeaders.split(/\r?\n/)) {
     const parts = line.split(":");
     const key = parts.shift()?.trim();
     if (key) {
@@ -13,19 +13,19 @@ function parseHeaders(rawHeaders: string) {
       try {
         headers.append(key, value);
       } catch (error) {
-        console.warn("Response " + (error as Error).message);
+        console.warn(`Response ${(error as Error).message}`);
       }
     }
-  });
+  }
   return headers;
 }
 
-const gmFetch: typeof fetch = async function (input, init) {
+const gmFetch: typeof fetch = async (input, init) => {
   const gmXhr = GM_xmlhttpRequest || GM.xmlHttpRequest;
   if (typeof gmXhr !== "function") {
     throw new DOMException(
       "GM_xmlhttpRequest or GM.xmlHttpRequest is not granted.",
-      "NotFoundError"
+      "NotFoundError",
     );
   }
   // construct a new request to apply default values
@@ -97,7 +97,7 @@ const gmFetch: typeof fetch = async function (input, init) {
               headers: parsedHeaders,
               status,
               statusText,
-            }
+            },
           );
           // non-intrusive override
           Object.defineProperties(response, {
@@ -129,7 +129,7 @@ const gmFetch: typeof fetch = async function (input, init) {
         },
         onerror: ({ statusText, error }) => {
           reject(
-            new TypeError(statusText || error || "Network request failed.")
+            new TypeError(statusText || error || "Network request failed."),
           );
           resolveBlob(null);
         },
