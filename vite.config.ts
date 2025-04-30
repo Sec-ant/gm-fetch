@@ -33,11 +33,11 @@ export default defineConfig(({ mode }) => {
             fileName: (format, entryName) => `${entryName}.${format}.js`,
           },
         },
-        resolve: {
-          alias: {
-            "vite-plugin-monkey/dist/client": "vite-plugin-monkey/dist/native",
-          },
-        },
+        // resolve: {
+        //   alias: {
+        //     "vite-plugin-monkey/dist/client": "vite-plugin-monkey/dist/native",
+        //   },
+        // },
       };
     case "monkey":
       return {
@@ -53,11 +53,11 @@ export default defineConfig(({ mode }) => {
             fileName: () => `${SCRIPT_NAME}.user.js`,
           },
         },
-        resolve: {
-          alias: {
-            "vite-plugin-monkey/dist/client": "vite-plugin-monkey/dist/native",
-          },
-        },
+        // resolve: {
+        //   alias: {
+        //     "vite-plugin-monkey/dist/client": "vite-plugin-monkey/dist/native",
+        //   },
+        // },
         plugins: [
           replace({
             preventAssignment: true,
