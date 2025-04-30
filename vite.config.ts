@@ -1,5 +1,4 @@
-import replace from "@rollup/plugin-replace";
-import { type Plugin, defineConfig } from "vite";
+import { defineConfig } from "vite";
 import monkey, { cdn } from "vite-plugin-monkey";
 import { name } from "./package.json";
 
@@ -33,11 +32,6 @@ export default defineConfig(({ mode }) => {
             fileName: (format, entryName) => `${entryName}.${format}.js`,
           },
         },
-        // resolve: {
-        //   alias: {
-        //     "vite-plugin-monkey/dist/client": "vite-plugin-monkey/dist/native",
-        //   },
-        // },
       };
     case "monkey":
       return {
@@ -53,19 +47,7 @@ export default defineConfig(({ mode }) => {
             fileName: () => `${SCRIPT_NAME}.user.js`,
           },
         },
-        // resolve: {
-        //   alias: {
-        //     "vite-plugin-monkey/dist/client": "vite-plugin-monkey/dist/native",
-        //   },
-        // },
         plugins: [
-          replace({
-            preventAssignment: true,
-            values: {
-              exports: JSON.stringify(undefined),
-              define: JSON.stringify(undefined),
-            },
-          }) as Plugin,
           monkey({
             entry: "./src/index.ts",
             build: {
