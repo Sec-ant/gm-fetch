@@ -1,3 +1,4 @@
+dist
 *.js
 *.ts
 *.cjs
@@ -10,4 +11,4 @@
 *.tsx
 *.json
 *.jsonc
-!package.json
+pnpm-lock.yaml
