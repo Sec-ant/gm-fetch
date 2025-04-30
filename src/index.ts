@@ -34,7 +34,7 @@ const gmFetch: typeof fetch = async (input, init) => {
   if (request.signal.aborted) {
     throw new DOMException("Network request aborted.", "AbortError");
   }
-  // convert request data to blob
+  // assign the Blob representation of the request body to data
   // TODO: https://github.com/Tampermonkey/tampermonkey/issues/1757
   const data = await request.blob();
   // apply non-safe headers
