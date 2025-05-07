@@ -50,7 +50,7 @@ const gmFetch: typeof fetch = async (input, init) => {
         method: request.method.toUpperCase(),
         url: request.url || location.href,
         headers,
-        data: data.size ? data : null,
+        data: data.size ? data : undefined,
         redirect: request.redirect,
         binary: true,
         nocache: request.cache === "no-store",
