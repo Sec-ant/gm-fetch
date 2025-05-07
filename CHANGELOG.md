@@ -1,5 +1,11 @@
 # @sec-ant/gm-fetch
 
+## 1.2.3
+
+### Patch Changes
+
+- 42f102f: Fix "Request with GET/HEAD method cannot have body" regression. @rachpt
+
 ## 1.2.2
 
 ### Patch Changes
