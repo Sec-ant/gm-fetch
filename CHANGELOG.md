@@ -1,5 +1,11 @@
 # @sec-ant/gm-fetch
 
+## 1.2.4
+
+### Patch Changes
+
+- 1faea32: Bump deps and enable OIDC publishing
+
 ## 1.2.3
 
 ### Patch Changes
