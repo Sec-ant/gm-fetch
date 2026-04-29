@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "ignoreUnknown": true,
-    "ignore": [".changeset/pre.json"]
+    "includes": ["**", "!**/.changeset/pre.json"]
   },
   "formatter": {
     "indentStyle": "space"
@@ -35,7 +35,7 @@
   },
   "overrides": [
     {
-      "include": ["package.json"],
+      "includes": ["**/package.json"],
       "json": {
         "formatter": {
           "lineWidth": 1

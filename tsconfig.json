@@ -9,6 +9,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "rootDir": "./src",
     "declaration": true,
     "emitDeclarationOnly": true,
     "declarationDir": "./dist",

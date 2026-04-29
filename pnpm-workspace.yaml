@@ -1,3 +1,4 @@
+dedupePeers: true
 onlyBuiltDependencies:
   - "@biomejs/biome"
   - esbuild
