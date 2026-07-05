@@ -1,5 +1,11 @@
 # @sec-ant/gm-fetch
 
+## 1.2.5
+
+### Patch Changes
+
+- 806be62: Fix the IIFE bundle referencing vite-plugin-monkey's internal `__MONKEY_WINDOW_KEY__` placeholder at runtime.
+
 ## 1.2.4
 
 ### Patch Changes
