@@ -1,4 +1,18 @@
-import { GM, GM_xmlhttpRequest } from "vite-plugin-monkey/dist/client";
+import type { GmContextType, GmType } from "vite-plugin-monkey/dist/client";
+
+type GmXhr = GmContextType["GM_xmlhttpRequest"] | GmType["xmlHttpRequest"];
+
+declare const GM: GmType | undefined;
+declare const GM_xmlhttpRequest: GmContextType["GM_xmlhttpRequest"] | undefined;
+
+function getGmXhr(): GmXhr | undefined {
+  if (typeof GM_xmlhttpRequest === "function") {
+    return GM_xmlhttpRequest;
+  }
+  if (typeof GM !== "undefined" && typeof GM.xmlHttpRequest === "function") {
+    return GM.xmlHttpRequest;
+  }
+}
 
 function parseHeaders(rawHeaders: string) {
   const headers = new Headers();
@@ -21,8 +35,8 @@ function parseHeaders(rawHeaders: string) {
 }
 
 const gmFetch: typeof fetch = async (input, init) => {
-  const gmXhr = GM_xmlhttpRequest || GM.xmlHttpRequest;
-  if (typeof gmXhr !== "function") {
+  const gmXhr = getGmXhr();
+  if (!gmXhr) {
     throw new DOMException(
       "GM_xmlhttpRequest or GM.xmlHttpRequest is not granted.",
       "NotFoundError",
