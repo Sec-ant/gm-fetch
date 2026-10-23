@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import monkey, { cdn } from "vite-plugin-monkey";
-import { name } from "./package.json";
+import packageJson from "./package.json" with { type: "json" };
+
+const { name } = packageJson;
 
 const LIB_NAME = "gmFetch";
 const SCRIPT_NAME = name.split("/").pop();
@@ -37,19 +39,10 @@ export default defineConfig(({ mode }) => {
       return {
         build: {
           emptyOutDir: false,
-          lib: {
-            entry: "./src/index.ts",
-            formats: ["umd"],
-            name: LIB_NAME,
-            // NOTE:
-            // we have to use function to return the file name,
-            // or the export won't be exposed in globalThis.
-            fileName: () => `${SCRIPT_NAME}.user.js`,
-          },
         },
         plugins: [
           monkey({
-            entry: "./src/index.ts",
+            entry: "./src/userscript.ts",
             build: {
               fileName: `${SCRIPT_NAME}.user.js`,
               metaFileName: true,

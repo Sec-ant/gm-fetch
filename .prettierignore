@@ -12,3 +12,5 @@ dist
 *.json
 *.jsonc
 pnpm-lock.yaml
+coverage
+.vitest

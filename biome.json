@@ -2,7 +2,12 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!**/.changeset/pre.json"]
+    "includes": [
+      "**",
+      "!**/.changeset/pre.json",
+      "!**/pnpm-lock.yaml",
+      "!**/*.md"
+    ]
   },
   "formatter": {
     "indentStyle": "space"
